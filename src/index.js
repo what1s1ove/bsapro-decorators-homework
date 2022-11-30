@@ -1,84 +1,85 @@
-const app = require("fastify")();
+const app = require('fastify')();
 
 const AppConfig = {
   PORT: 3000,
 };
 
 const ApiPath = {
-  USERS: "/users",
+  USERS: '/users',
 };
 
 const HttpMethod = {
-  GET: "GET",
-  POST: "POST",
+  GET: 'GET',
+  POST: 'POST',
 };
 
 const LogLevel = {
-  LOG: "log",
-  WARNING: "warning",
+  LOG: 'log',
+  WARNING: 'warning',
 };
 
-const initLogger = (cb, logLevel) => {
-  return (req, res) => {
-    const { method, url } = req;
+const logger = (logLevel) => {
+  return (value) => {
+    return (req, res) => {
+      const { method, url } = req;
 
-    console.log(`Log Level: ${logLevel} Method: ${method} URL: ${url}`);
+      console.log(`Log Level: ${logLevel} Method: ${method} URL: ${url}`);
 
-    cb.call(null, req, res);
+      value.call(null, req, res);
+    };
   };
 };
 
-const initDebounce = (cb, delay) => {
-  let lastTimeout = null;
+const debounce = (delay) => {
+  return (value) => {
+    let lastTimeout = null;
 
-  return (...args) => {
-    clearInterval(lastTimeout);
+    return (...args) => {
+      clearInterval(lastTimeout);
 
-    lastTimeout = setTimeout(() => cb.call(null, ...args), delay);
+      lastTimeout = setTimeout(() => {
+        value.call(null, ...args);
+      }, delay);
+    };
   };
 };
 
-const initHandler = (cb, options) => {
-  const { method, path } = options;
+const handler = (options) => {
+  return (value) => {
+    const { method, path } = options;
 
-  app.route({
-    method,
-    url: path,
-    handler: cb,
-  });
+    app.route({
+      method,
+      url: path,
+      handler: value,
+    });
 
-  return cb;
+    return value;
+  };
 };
 
 class Application {
-  constructor() {
-    this.handleUsersGet = initHandler(
-      initLogger(this.handleUsersGet, LogLevel.LOG),
-      {
-        method: HttpMethod.GET,
-        path: ApiPath.USERS,
-      }
-    );
-    this.handleUserCreate = initHandler(
-      initLogger(this.handleUserCreate, LogLevel.WARNING),
-      {
-        method: HttpMethod.POST,
-        path: ApiPath.USERS,
-      }
-    );
-    this.initDbConnection = initDebounce(this.initDbConnection, 5000);
-  }
-
+  @logger(LogLevel.LOG)
+  @handler({
+    method: HttpMethod.GET,
+    path: ApiPath.USERS,
+  })
   handleUsersGet(_req, res) {
     return res.send([]);
   }
 
+  @logger(LogLevel.WARNING)
+  @handler({
+    method: HttpMethod.POST,
+    path: ApiPath.USERS,
+  })
   handleUserCreate(req, res) {
     return res.send(req.body);
   }
 
+  @debounce(5000)
   initDbConnection() {
-    console.log("DB connection was success!");
+    console.log('DB connection was success!');
   }
 
   async init() {
