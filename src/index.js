@@ -1,4 +1,6 @@
-const app = require('fastify')();
+import fastify from 'fastify';
+
+const app = fastify();
 
 const AppConfig = {
   PORT: 3000,
