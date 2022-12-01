@@ -1,62 +1,6 @@
 import fastify from 'fastify';
-
-const AppConfig = {
-  PORT: 3000,
-};
-
-const ApiPath = {
-  USERS: '/users',
-};
-
-const HttpMethod = {
-  GET: 'GET',
-  POST: 'POST',
-};
-
-const LogLevel = {
-  LOG: 'log',
-  WARNING: 'warning',
-};
-
-const logger = (logLevel) => {
-  return (value) => {
-    return function (req, res) {
-      const { method, url } = req;
-
-      console.log(`Log Level: ${logLevel} Method: ${method} URL: ${url}`);
-
-      value.call(this, req, res);
-    };
-  };
-};
-
-const debounce = (delay) => {
-  return (value) => {
-    let lastTimeout = null;
-
-    return function (...args) {
-      clearInterval(lastTimeout);
-
-      lastTimeout = setTimeout(() => {
-        value.call(this, ...args);
-      }, delay);
-    };
-  };
-};
-
-const handler = (options) => {
-  return (value, { addInitializer }) => {
-    const { method, path } = options;
-
-    addInitializer(function () {
-      this.app.route({
-        method,
-        url: path,
-        handler: value,
-      });
-    });
-  };
-};
+import { debounce, handler, logger } from './decorators/decorators.js';
+import { ApiPath, ENV, HttpMethod, LogLevel } from './common/enums/enums.js';
 
 class Application {
   #app = fastify();
@@ -89,10 +33,9 @@ class Application {
   }
 
   async init() {
-    await this.app.listen({ port: AppConfig.PORT });
+    await this.app.listen({ port: ENV.PORT });
 
     this.initDbConnection();
-    this.handleUserCreate({}, { send: () => {} });
   }
 }
 
