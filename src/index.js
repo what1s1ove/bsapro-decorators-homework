@@ -5,16 +5,14 @@ import { initApi } from './api/api.js';
 import { initDbConnection } from './db.js';
 
 class Application {
-  constructor() {
-    initApi();
-  }
-
   @debounce(5000)
   initDbConnection() {
     initDbConnection();
   }
 
   async init() {
+    initApi();
+
     await fastify.listen({ port: ENV.PORT });
 
     this.initDbConnection();
