@@ -1,7 +1,5 @@
 import fastify from 'fastify';
 
-const app = fastify();
-
 const AppConfig = {
   PORT: 3000,
 };
@@ -22,12 +20,12 @@ const LogLevel = {
 
 const logger = (logLevel) => {
   return (value) => {
-    return (req, res) => {
+    return function (req, res) {
       const { method, url } = req;
 
       console.log(`Log Level: ${logLevel} Method: ${method} URL: ${url}`);
 
-      value.call(null, req, res);
+      value.call(this, req, res);
     };
   };
 };
@@ -36,31 +34,37 @@ const debounce = (delay) => {
   return (value) => {
     let lastTimeout = null;
 
-    return (...args) => {
+    return function (...args) {
       clearInterval(lastTimeout);
 
       lastTimeout = setTimeout(() => {
-        value.call(null, ...args);
+        value.call(this, ...args);
       }, delay);
     };
   };
 };
 
 const handler = (options) => {
-  return (value) => {
+  return (value, { addInitializer }) => {
     const { method, path } = options;
 
-    app.route({
-      method,
-      url: path,
-      handler: value,
+    addInitializer(function () {
+      this.app.route({
+        method,
+        url: path,
+        handler: value,
+      });
     });
-
-    return value;
   };
 };
 
 class Application {
+  #app = fastify();
+
+  get app() {
+    return this.#app;
+  }
+
   @logger(LogLevel.LOG)
   @handler({
     method: HttpMethod.GET,
@@ -85,9 +89,10 @@ class Application {
   }
 
   async init() {
-    await app.listen({ port: AppConfig.PORT });
+    await this.app.listen({ port: AppConfig.PORT });
 
     this.initDbConnection();
+    this.handleUserCreate({}, { send: () => {} });
   }
 }
 
