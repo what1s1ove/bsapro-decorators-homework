@@ -1,82 +1,40 @@
-const app = require("fastify")();
+import { ApiPath, AppConfig, LogLevel, HttpMethod } from "./common/common.js";
+import {
+  initLogger,
+  initHandler,
+  initDebounce,
+} from "./decorators/decorators.js";
 
-const AppConfig = {
-  PORT: 3000,
-};
+import fastify from "fastify";
 
-const ApiPath = {
-  USERS: "/users",
-};
-
-const HttpMethod = {
-  GET: "GET",
-  POST: "POST",
-};
-
-const LogLevel = {
-  LOG: "log",
-  WARNING: "warning",
-};
-
-const initLogger = (cb, logLevel) => {
-  return (req, res) => {
-    const { method, url } = req;
-
-    console.log(`Log Level: ${logLevel} Method: ${method} URL: ${url}`);
-
-    cb.call(null, req, res);
-  };
-};
-
-const initDebounce = (cb, delay) => {
-  let lastTimeout = null;
-
-  return (...args) => {
-    clearInterval(lastTimeout);
-
-    lastTimeout = setTimeout(() => cb.call(null, ...args), delay);
-  };
-};
-
-const initHandler = (cb, options) => {
-  const { method, path } = options;
-
-  app.route({
-    method,
-    url: path,
-    handler: cb,
-  });
-
-  return cb;
-};
+const app = fastify();
 
 class Application {
-  constructor() {
-    this.handleUsersGet = initHandler(
-      initLogger(this.handleUsersGet, LogLevel.LOG),
-      {
-        method: HttpMethod.GET,
-        path: ApiPath.USERS,
-      }
-    );
-    this.handleUserCreate = initHandler(
-      initLogger(this.handleUserCreate, LogLevel.WARNING),
-      {
-        method: HttpMethod.POST,
-        path: ApiPath.USERS,
-      }
-    );
-    this.initDbConnection = initDebounce(this.initDbConnection, 5000);
-  }
-
+  @initHandler(
+    {
+      method: HttpMethod.GET,
+      path: ApiPath.USERS,
+    },
+    app
+  )
+  @initLogger(LogLevel.LOG)
   handleUsersGet(_req, res) {
     return res.send([]);
   }
 
+  @initHandler(
+    {
+      method: HttpMethod.POST,
+      path: ApiPath.USERS,
+    },
+    app
+  )
+  @initLogger(LogLevel.WARNING)
   handleUserCreate(req, res) {
     return res.send(req.body);
   }
 
+  @initDebounce(5000)
   initDbConnection() {
     console.log("DB connection was success!");
   }
