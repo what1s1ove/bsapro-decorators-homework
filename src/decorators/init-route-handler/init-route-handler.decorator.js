@@ -1,4 +1,4 @@
-const initHandler = (options, app) => {
+const initRouteHandler = (options, app) => {
   return (func) => {
     const { method, path } = options;
 
@@ -12,4 +12,4 @@ const initHandler = (options, app) => {
   };
 };
 
-export { initHandler };
+export { initRouteHandler };
