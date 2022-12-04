@@ -1,91 +1,23 @@
-const app = require("fastify")();
-
-const AppConfig = {
-  PORT: 3000,
-};
-
-const ApiPath = {
-  USERS: "/users",
-};
-
-const HttpMethod = {
-  GET: "GET",
-  POST: "POST",
-};
-
-const LogLevel = {
-  LOG: "log",
-  WARNING: "warning",
-};
-
-const initLogger = (cb, logLevel) => {
-  return (req, res) => {
-    const { method, url } = req;
-
-    console.log(`Log Level: ${logLevel} Method: ${method} URL: ${url}`);
-
-    cb.call(null, req, res);
-  };
-};
-
-const initDebounce = (cb, delay) => {
-  let lastTimeout = null;
-
-  return (...args) => {
-    clearInterval(lastTimeout);
-
-    lastTimeout = setTimeout(() => cb.call(null, ...args), delay);
-  };
-};
-
-const initHandler = (cb, options) => {
-  const { method, path } = options;
-
-  app.route({
-    method,
-    url: path,
-    handler: cb,
-  });
-
-  return cb;
-};
+import { AppConfig, DebounceTimeout } from "./common/enums/enums.js";
+import { debounce } from "./common/decorators/decorators.js";
+import { server } from "./server.js";
+import { UsersApi } from "./api/api.js";
 
 class Application {
   constructor() {
-    this.handleUsersGet = initHandler(
-      initLogger(this.handleUsersGet, LogLevel.LOG),
-      {
-        method: HttpMethod.GET,
-        path: ApiPath.USERS,
-      }
-    );
-    this.handleUserCreate = initHandler(
-      initLogger(this.handleUserCreate, LogLevel.WARNING),
-      {
-        method: HttpMethod.POST,
-        path: ApiPath.USERS,
-      }
-    );
-    this.initDbConnection = initDebounce(this.initDbConnection, 5000);
+    new UsersApi();
   }
 
-  handleUsersGet(_req, res) {
-    return res.send([]);
+  @debounce(DebounceTimeout.TWO_SECONDS)
+  #initDbConnection() {
+    console.log("DB connected successfully.");
   }
 
-  handleUserCreate(req, res) {
-    return res.send(req.body);
-  }
+  async start() {
+    await server.listen({ port: AppConfig.PORT });
 
-  initDbConnection() {
-    console.log("DB connection was success!");
-  }
-
-  async init() {
-    await app.listen({ port: AppConfig.PORT });
-
-    this.initDbConnection();
+    this.#initDbConnection();
   }
 }
 
-new Application().init().catch(console.error);
+new Application().start().catch(console.error);
