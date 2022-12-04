@@ -1,6 +1,6 @@
 import fastify from "fastify";
 
-class FastifyServer {
+class Server {
   #app;
 
   constructor() {
@@ -26,6 +26,6 @@ class FastifyServer {
   }
 }
 
-const fastifyServer = new FastifyServer();
+const server = new Server();
 
-export { fastifyServer };
+export { server };
