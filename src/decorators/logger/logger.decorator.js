@@ -1,4 +1,4 @@
-const initLogger = (logLevel) => {
+const logger = (logLevel) => {
   return (func) => {
     return (req, res) => {
       const { method, url } = req;
@@ -10,4 +10,4 @@ const initLogger = (logLevel) => {
   };
 };
 
-export { initLogger };
+export { logger };

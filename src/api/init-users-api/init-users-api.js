@@ -1,11 +1,11 @@
 import { ApiPath } from "../../common/api-path.js";
 import { HttpMethod } from "../../common/http-method.js";
 import { LogLevel } from "../../common/log-level.js";
-import { initLogger } from "../../decorators/decorators.js";
+import { logger } from "../../decorators/decorators.js";
 import { fastifyServer } from "../../server.js";
 
 class UsersApi {
-  @initLogger(LogLevel.LOG)
+  @logger(LogLevel.LOG)
   @fastifyServer.routeHandler({
     method: HttpMethod.GET,
     path: ApiPath.USERS,
@@ -14,7 +14,7 @@ class UsersApi {
     return res.send([]);
   }
 
-  @initLogger(LogLevel.WARNING)
+  @logger(LogLevel.WARNING)
   @fastifyServer.routeHandler({
     method: HttpMethod.POST,
     path: ApiPath.USERS,

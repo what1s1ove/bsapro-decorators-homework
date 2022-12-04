@@ -1,4 +1,4 @@
-const initDebounce = (delay) => {
+const debounce = (delay) => {
   return (func) => {
     let lastTimeout = null;
 
@@ -10,4 +10,4 @@ const initDebounce = (delay) => {
   };
 };
 
-export { initDebounce };
+export { debounce };

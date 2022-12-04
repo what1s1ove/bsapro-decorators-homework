@@ -1,11 +1,11 @@
 import { AppConfig } from "./common/common.js";
-import { initDebounce } from "./decorators/decorators.js";
+import { debounce } from "./decorators/decorators.js";
 
 import { fastifyServer } from "./server.js";
 import { UsersApi } from "./api/api.js";
 
 class Application {
-  @initDebounce(5000)
+  @debounce(5000)
   initDbConnection() {
     console.log("DB connection was success!");
   }

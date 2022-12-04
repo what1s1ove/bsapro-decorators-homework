@@ -1,2 +1,2 @@
-export { initDebounce } from "./init-debounce/init-debounce.decorator.js";
-export { initLogger } from "./init-logger/init-logger.decorator.js";
+export { debounce } from "./debounce/debounce.decorator.js";
+export { logger } from "./logger/logger.decorator.js";
