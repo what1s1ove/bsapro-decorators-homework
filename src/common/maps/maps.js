@@ -1,1 +1,1 @@
-export { LogLevelToConsoleColor } from "./log-level-to-console-color.map.js";
+export { logLevelToConsoleColor } from "./log-level-to-console-color.map.js";

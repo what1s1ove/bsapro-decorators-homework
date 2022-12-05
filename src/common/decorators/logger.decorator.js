@@ -1,4 +1,4 @@
-import { LogLevelToConsoleColor } from "../maps/maps.js";
+import { logLevelToConsoleColor } from "../maps/maps.js";
 
 const logger = (logLevel) => {
   return (cbFunction) => {
@@ -6,9 +6,9 @@ const logger = (logLevel) => {
       const { method, url } = req;
 
       console.log(
-        LogLevelToConsoleColor[logLevel],
+        logLevelToConsoleColor[logLevel],
         `Log Level: ${logLevel} Method: ${method} URL: ${url}`,
-        LogLevelToConsoleColor.RESET
+        logLevelToConsoleColor.reset
       );
 
       cbFunction.call(null, req, res);
