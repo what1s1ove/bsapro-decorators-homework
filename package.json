@@ -1,14 +1,20 @@
 {
   "private": true,
+  "engines": {
+    "node": "18.12.1",
+    "npm": "8.x.x"
+  },
   "scripts": {
-    "start:dev": "babel-node src/index.js"
+    "start:dev": "node --watch --loader babel-register-esm src/index.js"
   },
   "devDependencies": {
     "@babel/core": "7.20.2",
     "@babel/node": "7.20.2",
-    "@babel/plugin-proposal-decorators": "7.20.2"
+    "@babel/plugin-proposal-decorators": "7.20.2",
+    "babel-register-esm": "1.2.4"
   },
   "dependencies": {
     "fastify": "4.10.0"
-  }
+  },
+  "type": "module"
 }
