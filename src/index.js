@@ -33,6 +33,7 @@ const logger = (logLevel) => {
 const debounce = (delay) => {
   return (value) => {
     let lastTimeout = null;
+
     return (...args) => {
       clearInterval(lastTimeout);
       lastTimeout = setTimeout(() => value.call(null, ...args), delay);
@@ -58,7 +59,6 @@ class Application {
   @registerPathHandler({
     method: HttpMethod.GET,
     path: ApiPath.USERS,
-    app: this._app
   })
   @logger(LogLevel.LOG)
   handleUsersGet(_req, res) {
