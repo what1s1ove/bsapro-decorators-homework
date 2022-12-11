@@ -1,6 +1,6 @@
 import fastify from 'fastify';
 
-class FastifyServer {
+class Server {
   #instance;
 
   constructor() {
@@ -22,4 +22,4 @@ class FastifyServer {
   listen = (port) => this.#instance.listen(port);
 }
 
-export { FastifyServer };
+export { Server };

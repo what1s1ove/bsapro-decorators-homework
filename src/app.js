@@ -1,6 +1,5 @@
 import { initUserApi } from './api/api.js';
-import { FastifyServer } from './fastify-server.js';
-import { debounce } from './decorators/decorators.js'
+import { debounce, Server } from './decorators/decorators.js'
 import { AppConfig } from './common/configs/configs.js';
 import { DebounceTimeout } from './common/enums/enums.js';
 
@@ -22,4 +21,4 @@ class Application {
   }
 }
 
-new Application().init(new FastifyServer()).catch(console.error);
+new Application().init(new Server()).catch(console.error);
