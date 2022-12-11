@@ -1,12 +1,11 @@
 import { ApiPath, HttpMethod, LogLevel } from '../../common/enums/enums.js';
-import { logger } from '../../decorators/decorators.js';
 
-const initUserApi = server => new class User {
+const initUserApi = ({ server, logger }) => new class User {
   @server.route({
     method: HttpMethod.GET,
     path: ApiPath.USERS,
   })
-  @logger(LogLevel.LOG)
+  @logger.log(LogLevel.INFO)
   handleUsersGet(_req, res) {
     return res.send([]);
   }
@@ -15,7 +14,7 @@ const initUserApi = server => new class User {
     method: HttpMethod.POST,
     path: ApiPath.USERS,
   })
-  @logger(LogLevel.WARNING)
+  @logger.log(LogLevel.INFO)
   handleUserCreate(req, res) {
     return res.send(req.body);
   }
