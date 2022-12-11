@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start:dev": "nodemon --experimental-loader babel-register-esm src/index.js"
+    "start:dev": "nodemon --experimental-loader babel-register-esm src/app.js"
   },
   "devDependencies": {
     "@babel/core": "7.20.2",
