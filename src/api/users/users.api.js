@@ -1,6 +1,6 @@
 import {logger} from "../../decorators/logger/logger.decorator.js";
-import {ApiPath, HttpMethod, LogLevel} from "../../common/enums/enums.js"
-import {server} from '../../server.js'
+import {ApiPath, HttpMethod, LogLevel} from "../../common/enums/enums.js";
+import {server} from "../../server.js"
 
 class UsersApi {
   @logger(LogLevel.LOG)

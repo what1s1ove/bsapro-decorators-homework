@@ -1,5 +1,5 @@
-import {AppConfig} from './common/enums/enums.js'
 import fastify from "fastify";
+import {AppConfig} from "./common/enums/enums.js"
 
 class AppServer {
   #server;

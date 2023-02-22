@@ -1,4 +1,4 @@
-import {UsersApi} from './users/users.api.js'
+import {UsersApi} from "./users/users.api.js"
 
 const initialiseApi = () => {
   new UsersApi();
