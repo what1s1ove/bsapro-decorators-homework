@@ -1,26 +1,18 @@
 import {ApiPath, AppConfig, HttpMethod, LogLevel} from './common/enums/enums.js'
-import {debounce, logger} from './decorators/decorators.js'
+import {debounce} from './decorators/decorators.js'
 import {server} from './server.js'
-
+import {initialiseApi} from "./api/api.js";
+import {dbService} from './services/services.js'
 
 class Application {
 
-  @logger(LogLevel.LOG)
-  handleUsersGet(_req, res) {
-    return res.send([]);
-  }
-
-  @logger(LogLevel.WARNING)
-  handleUserCreate(req, res) {
-    return res.send(req.body);
-  }
-
   @debounce(5000)
   initDbConnection() {
-    console.log("DB connection was success!");
+    dbService.initDbConnection();
   }
 
   async init() {
+    initialiseApi();
     await server.listen(AppConfig.PORT);
 
     this.initDbConnection();
