@@ -1,14 +1,17 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
-    "start:dev": "babel-node src/index.js"
+    "start:dev": "node --loader babel-register-esm src/index.js"
   },
   "devDependencies": {
     "@babel/core": "7.20.2",
     "@babel/node": "7.20.2",
-    "@babel/plugin-proposal-decorators": "7.20.2"
+    "@babel/plugin-proposal-decorators": "7.20.2",
+    "babel-register-esm": "1.2.4"
   },
   "dependencies": {
+    "dotenv": "16.0.3",
     "fastify": "4.10.0"
   }
 }
