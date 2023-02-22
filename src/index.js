@@ -1,22 +1,6 @@
-const app = require("fastify")();
-
-const AppConfig = {
-  PORT: 3000,
-};
-
-const ApiPath = {
-  USERS: "/users",
-};
-
-const HttpMethod = {
-  GET: "GET",
-  POST: "POST",
-};
-
-const LogLevel = {
-  LOG: "log",
-  WARNING: "warning",
-};
+import {ApiPath, AppConfig, HttpMethod, LogLevel} from './common/enums/enums.js'
+import fastify from "fastify";
+const server = fastify();
 
 const initLogger = (cb, logLevel) => {
   return (req, res) => {
@@ -41,7 +25,7 @@ const initDebounce = (cb, delay) => {
 const initHandler = (cb, options) => {
   const { method, path } = options;
 
-  app.route({
+  server.route({
     method,
     url: path,
     handler: cb,
@@ -82,7 +66,7 @@ class Application {
   }
 
   async init() {
-    await app.listen({ port: AppConfig.PORT });
+    await server.listen({ port: AppConfig.PORT });
 
     this.initDbConnection();
   }

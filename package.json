@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "start:dev": "babel-node src/index.js"
   },
@@ -9,6 +10,7 @@
     "@babel/plugin-proposal-decorators": "7.20.2"
   },
   "dependencies": {
+    "dotenv": "16.0.3",
     "fastify": "4.10.0"
   }
 }
