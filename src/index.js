@@ -1,6 +1,6 @@
 import {ApiPath, AppConfig, HttpMethod, LogLevel} from './common/enums/enums.js'
-import fastify from "fastify";
-const server = fastify();
+import {handleRoute, logger} from './decorators/decorators.js'
+import {server} from './server.js'
 
 const initLogger = (cb, logLevel) => {
   return (req, res) => {
@@ -24,12 +24,12 @@ const initDebounce = (cb, delay) => {
 
 const initHandler = (cb, options) => {
   const { method, path } = options;
-
-  server.route({
-    method,
-    url: path,
-    handler: cb,
-  });
+  //
+  // server.route({
+  //   method,
+  //   url: path,
+  //   handler: cb,
+  // });
 
   return cb;
 };
@@ -53,10 +53,20 @@ class Application {
     this.initDbConnection = initDebounce(this.initDbConnection, 5000);
   }
 
+  @logger(LogLevel.LOG)
+  @handleRoute({
+    method: HttpMethod.GET,
+    path: ApiPath.USERS,
+  })
   handleUsersGet(_req, res) {
     return res.send([]);
   }
 
+  @logger(LogLevel.WARNING)
+  @handleRoute({
+    method: HttpMethod.POST,
+    path: ApiPath.USERS,
+  })
   handleUserCreate(req, res) {
     return res.send(req.body);
   }
@@ -66,7 +76,7 @@ class Application {
   }
 
   async init() {
-    await server.listen({ port: AppConfig.PORT });
+    await server.listen(AppConfig.PORT);
 
     this.initDbConnection();
   }
