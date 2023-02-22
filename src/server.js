@@ -9,10 +9,17 @@ class AppServer {
     this.#port = port;
   }
 
-  handleRoute({method, url, handler}) {
-    this.#server.route({
-      method, url, handler
-    })
+  handleRoute({method, url}) {
+    return (value) => {
+
+      this.#server.route({
+        method,
+        url,
+        handler: value,
+      });
+
+      return value;
+    };
   }
 
   listen() {

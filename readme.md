@@ -11,5 +11,7 @@
 - Use ES-modules (`"type": "module"` in the `package.json`) & split code between modules
 - Initialize `fastify` in class constructor
 
-Updated:
-To start the app you need to copy content of .env.example file into your .env file
+To run app:
+1. Copy content of .env.example file into your .env file
+2. <code>npm i</code> in the console
+
